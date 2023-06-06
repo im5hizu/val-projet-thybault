@@ -18,7 +18,7 @@ if ($compared == 1) {
     $user = $sth->fetch(PDO::FETCH_ASSOC);
 
 } else {
-    $hello = "Vous n'êtes pas connecté!";
+    header('Location: log-in.php');
 }
 
 $sqlExistingUsers = "SELECT * FROM `users`";
@@ -32,8 +32,7 @@ $sth->execute();
 $existingProductsArray = $sth->fetchAll(PDO::FETCH_ASSOC);
 
 if($_POST){
-    $tabError = verifPost();
-    var_dump($_POST);
+    $tabError = verifPost($dbh);
 }
 
 
@@ -155,42 +154,73 @@ if($_POST){
                 <?php endforeach;?>
             </tbody>
         </table>
-        
-        <?php if(isset($tabError[0])):?>
-            <p><?= $tabError[1]?>
-        <?php endif; ?>
-        <h3>Ajouter un utilisateur:</h3>
-        <form action="<?= $_SERVER['PHP_SELF']?>" method="post">
-        <fieldset style="display: grid; width: fit-content;">
-            <label for="username">Nom d'utilisateur:</label>
-            <input type="text" name="username" id="username">
 
-            <label for="password">Mot de passe:</label>
-            <input type="password" name="password" id="password">
+            <?php if(isset($tabError[0])):?>
+                <p style='margin-top: 10%; display: flex; justify-content: center;'><?= $tabError[1]?>
+            <?php endif; ?>
 
-            <label for="firstName">Prénom:</label>
-            <input type="text" name="firstName" id="firstName">
+        <div style='display: flex; justify-content: space-around;'>
+            <form action="<?= $_SERVER['PHP_SELF']?>" method="post" enctype='multipart/form-data' style="display: flex; width: 25%">
+                <fieldset style="display: grid; width: fit-content;">
+                    <legend>Ajouter un utilisateur:</legend>
 
-            <label for="lastName">Nom:</label>
-            <input type="text" name="lastName" id="lastName">
+                    <label for="username">Nom d'utilisateur:</label>
+                    <input type="text" name="username" id="username">
 
-            <fieldset>
-                <legend>Admin:</legend>
-                <label for="admin">Oui</label>
-                <input type="radio" name="admin" id="admin" value='Y'>
+                    <label for="password">Mot de passe:</label>
+                    <input type="password" name="password" id="password">
 
-                <label for="admin">Non</label>
-                <input type="radio" name="admin" id="admin" value="N">
-            </fieldset>
+                    <label for="firstName">Prénom:</label>
+                    <input type="text" name="firstName" id="firstName">
 
-            <label for="img">Photo de profil:</label>
-            <input type="file" name="img">
+                    <label for="lastName">Nom:</label>
+                    <input type="text" name="lastName" id="lastName">
 
-            <input type="submit" value="Ajouter" style='width: 50%;display:flex; justify-content: center; margin-top: 25px; transform: translateX(50%)'>
-        </fieldset>
-        </form>
+                    <fieldset style="display: flex; justify-content: space-around">
+                        <legend>Admin:</legend>
+                        <label for="admin">Oui</label>
+                        <input type="radio" name="admin" id="admin" value='Y'>
+
+                        <label for="admin">Non</label>
+                        <input type="radio" name="admin" id="admin" value="N">
+                    </fieldset>
+
+                    <label for="imgPost">Photo de profil:</label>
+                    <input type="file" name="imgPost">
+
+                    <input type="submit" value="Ajouter" style='width: 50%;display:flex; justify-content: center; margin-top: 25px; transform: translateX(50%)'>
+                </fieldset>
+            </form>
 
 
+            <form action="<?= $_SERVER['PHP_SELF']?>" method="post" enctype="multipart/form-data">
+                <fieldset style='display: grid; width: fit-content'>
+                    <legend>Ajouter un produit:</legend>
+
+                    <label for="title">Titre:</label>
+                    <input type="text" name="title" id="title">
+
+                    <label for="description">Description:</label>
+                    <input type="text" name="description" id="description">
+
+                    <label for="imgProduct">Photo:</label>
+                    <input type="file" name="imgProduct" id="imgProduct">
+
+                    <input type="hidden" name="dateCreation" value="<?= date('Y-d-m')?>">
+
+                    <label for="avis">Avis:</label>
+                    <input type="text" name="avis" id="avis">
+
+                    <label for="price">Prix:</label>
+                    <input type="number" name="price" id="price" step='any''>
+
+                    <input type="submit" value="Ajouter" style='width: 50%;display:flex; justify-content: center; margin-top: 25px; transform: translateX(50%)'>
+
+
+                </fieldset>
+            </form>
+
+        </div>
 
     <?php endif;?>
 </body>
