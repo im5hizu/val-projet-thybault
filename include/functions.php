@@ -124,6 +124,9 @@ require_once('connection.php');
             if(empty($_FILES['imgProduct']['tmp_name'])) {
                 $error = true;
                 $errorMsg .= '-Image';
+            }elseif($_FILES['imgProduct']['type'] !== 'image/jpg' || $_FILES['imgProduct']['type'] !== 'image/png'){
+                $error = true;
+                $errorMsg .= "-Le fichier uploadé n'est pas une image";
             } else {
                 if(!file_exists('img/produits/')) {
                     $upload = mkdir('img/produits/', 0777);
